@@ -2,7 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
-const PostModel = require('./Schema/Post')
+const PostModel = require('./Schema/Post');
+const CommentModel = require('./Schema/Comment');
+
 
 const app = express();
 
@@ -44,14 +46,14 @@ app.post('/facebookpost', async (req, res) => {
     try {
         const newPost = await new PostModel(data).save();
         const allPost = await PostModel.find();
-        res.status(200).json({newPost, allPost})
-        console.log(newPost,allPost);
+        res.status(200).json({ newPost, allPost })
+        console.log(newPost, allPost);
     } catch (error) {
         throw new Error(error)
         res.status(200).json(error.message)
     }
-
 })
+
 app.get('/facebookpost', async (req, res) => {
     const data = req.body;
     try {
@@ -62,6 +64,8 @@ app.get('/facebookpost', async (req, res) => {
     }
 })
 
+
+
 // app.put('/facebookpost/:id', async (req, res) => {
 
 //     const id = req.params.id;
@@ -71,4 +75,28 @@ app.get('/facebookpost', async (req, res) => {
 
 
 // })
+
+
+app.post('/facebokcomments', async (req, res) => {
+    const data = req.body;
+    try {
+        const comment = await new CommentModel(data).save();
+        const allComment = await CommentModel.find();
+        res.status(201).json({ comment, allComment })
+    } catch (error) {
+        res.status(200).json(error.message)
+    }
+})
+
+app.get('/facebokcomments', async (req, res) => {
+    const data = req.body;
+    try {
+        const comment = await CommentModel.find();
+        res.status(201).json(comment)
+    } catch (error) {
+        res.status(200).json(error.message)
+    }
+})
+
+
 
